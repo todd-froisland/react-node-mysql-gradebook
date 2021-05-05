@@ -6,10 +6,10 @@ const app = express();
 
 
 const connection = mysql.createConnection({
-    host: ''
-    user: '',
-    password: '',
-    database: ''
+    host: 'localhost',
+    user: 'root',
+    password: 'Witchita2!',
+    database: 'gradebook'
 });
 
 connection.connect(err => {
@@ -41,9 +41,9 @@ app.get('/gradebook/student', (req, res) => {
     });
 });
 
-app.get('/gradebook/student/add', (req, res) => {
+app.post('/gradebook/student/add', (req, res) => {
     const {studentName, studentId, studentEmail} = req.query;
-    console.log(studentName, studentId, studentEmail);
+    console.log();
     const INSERT_STUDENT_QUERY = 
     `INSERT INTO student 
     (studentName, studentId, studentEmail)
@@ -53,7 +53,7 @@ app.get('/gradebook/student/add', (req, res) => {
             return res.send(err)
         }
         else {
-            return res.send('successfully added new student', results);
+            return res.send(results);
         }
     })
 
@@ -100,7 +100,7 @@ app.get('/gradebook/grades', (req, res) => {
             })
         }
     })
-})
+});
 
 app.get('/gradebook/grades/add', (req, res) => {
     const {courseId, studentId, letterGrade, numberGrade} = req.query;
@@ -114,6 +114,11 @@ app.get('/gradebook/grades/add', (req, res) => {
             return res.send('successfully added grade to gradebook');
         }
     })
+});
+
+app.get('/gradebook/grades/average', (req, res) => {
+    const {studentId} = req.query;
+    const AVERAGE_GPA_QUERY = `SELECT numberGrade FROM grade WHERE studentId='${studentId}'`;
 })
 
 
